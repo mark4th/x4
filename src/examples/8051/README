@@ -1,0 +1,4 @@
+This is currently very slightly broken, there are a couple of opcodes that
+are not being encoded correctly and i have not tested this against a more
+modern version of x4.  it might work for the most part and is still a
+good example to study but my todo list didnt get to fixing this yet :)

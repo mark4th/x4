@@ -1,0 +1,224 @@
+
+
+    
+    X    X  X    X
+    X    X  X    X
+     X  X   X    X
+      XX    XXXXXX
+     X  X        X
+    X    X       X
+    X    X       X
+
+    Legal Crap
+    ----------
+
+    Section 5, paragraph 2 of the LGPL does not apply to x4.  Section 5,
+    paragraph 2 is in direct contradiction with paragraph 9 of the preamble
+    which states "We use this licence for certain libraries in order to
+    permit linking those libraries """"INTO"""" non-free programs" (emphasis
+    added).
+
+    The whole purpose of using the LGPL (as stated elsewhere in the license)
+    is to encourage the widest possible use of the library.  I therefore
+    apply all of the LGPL to x4 except any sections that would force LGPL on
+    programs created/compiled under x4.
+
+    Some might say that x4 is not a library but a compiler.  This is true,
+    it is a compiler, an interpreter and complete development and debugging
+    environment.  It is also a library of routines that will compile your
+    sources onto the end of itself allowing your code to use any of the
+    functions therein.
+
+    If you compile your sources on top of x4 and write out an executable,
+    part of that executable is going to be the x4 kernel.  That part of your
+    executable is LGPL and you must supply the sources to it on demand.  The
+    part of the executable that is derived from your souces may have any
+    damned license you want it to have and you can withhold all your sources
+    if you so choose.  This is a non viral GPL.
+
+    Modified versions of the x4 kernel however are STILL x4.
+
+    Introduction
+    ------------
+
+    x4 is an attempt to produce a true Forth for Linux.  This is
+    something I consider to be sadly lacking for this great operating
+    system.  Any Forth that is not able to compile its own sources is not in
+    my opinion worth using and Forth usually does not have an extension that
+    will allow it to compile C sources.  Why would you even want one!
+
+    So far the only Linux Forth I liked the look of is lib4th.  This however
+    is quite a complex Forth with a different set of goals than I have set
+    for x4.  It is however worth using :)
+
+    I have been writing Forth programs now for over fifteen years both on a
+    professional level and for the fun of it.  I have not however been fully
+    aware of how certain words function.  Mostly I didnt care, I knew how to
+    use them so who cares how they work.  I now believe that this is a sorry
+    state of affairs.  Nobody should be coding in any language without a
+    complete grasp of said langage.
+
+    So - for this reason (and some others) I have written x4.  It has
+    been a great Forth and Linux programming learning experience.  I
+    encourage everyone to try write at least one Forth compiler during the
+    course of their life, it's an education ! :)
+
+    Goals
+    -----
+
+    There are a number of goals that I have in mind while writing x4k. 
+    Small size and fast execution are of course important but making a
+    compiler kernel that is portable across various operating systems and
+    processors is not!  x4 will be a master of one operating system and one
+    processor not a jack of all.
+
+    Versions of x4 for other processors are planned.  The kernels for each
+    processor shall be written from scratch and shall utilise the respective
+    processors to the max.  Application code will compile and execute
+    identically on every version of the compiler without need of
+    modification.  The individual kernels will not however be portable.
+
+    If you look at the sources you will find that most of it is written in
+    assembler.  This is deliberate.  I believe that most of the code within
+    a Forth kernel should be written in assembler for speed of execution.
+    Having said this I would like to point out that the various pieces of
+    assembly code within the kernel are NOT optimized beyond readablity.
+
+    You will also note that the sources make no references to any linkable
+    libraries.  This is also deliberate, if I wanted to have a middle man do
+    all the work for me or have mommy hold my hand all the time I would be
+    coding in C.
+
+    /me ducks :)
+
+    Actually all of the above is a big lie designed to hide my true goal of
+    converting Linus to Forth and getting him to rewrite the Linux kernel :)
+    - With more comments this time!!!
+
+    Borg Of x4 we are, Futile is resistance, Assimilated will you be!
+
+    Installing
+    ----------
+
+    There is as yet no install for x4.  This is a beta release that is still
+    under development (read: under-developed).  It can interpret source
+    files and save out executables but please do not be supprised if you
+    should happen upon a bug or two.
+
+    In order to build the x4 kernel you will need the GNU make utility and
+    the ever so slightly buggy NASM assembler.  I am using version 0.98.34. 
+    If you have a different version you will still be ok if it contains the
+    %xdefine directive.  Without this directive it would take divine
+    intervention to get the sources to assemble.
+
+    The latest versions of nasm support the %xdefine directive and can be
+    found at http://nasm.sf.net.
+
+    To make x4 type
+
+    make [enter]
+
+    ...and the Forth kernel (kernel.com) will be deposited in the directory.
+
+    Once you have an assembled kernel it is time to extend.  To do this you
+    run the extend bash script as follows...
+
+    ./extend
+
+    This script makes the kernel interpret the Forth source file x4.f which
+    is a series of floads for each of the selected extensions.  The last
+    thing in x4.f is an fsave x4 which will make the kernel save out a new
+    copy of itself in the current directory to a file called x4.  An fsave
+    is an implied bye so if everything went well you should be at the shell
+    prompt once again.
+
+    Type ./x4 and you should get a nice signon message.
+
+    x4 supports hashed vocabularies but the kernel has to be told to rehash
+    all the words that nasm chained onto the first thread by executing the
+    word rehash.  I have placed a rehash at the top of the file x4.f so the
+    extend is much faster now.  You should also notice your application code
+    compiles quite a a bit faster too.
+
+    The compiles are also made faster by my memory mapping entire files on
+    fload.  Im estimating about 800k of source compiled per second on my old
+    AMD k6-3/550 laptop (now deceased) and over a MEG of source per seecond
+    on my new laptop (emachines M5312 with an 1800 Mhz athoon-xp).
+
+    NOTE:  The word rehash will disappear once I start metacompiling
+
+    There is STILL no assembler extension nor a meta compiler.  These are
+    planned for future enhancements to the x4 environment.  As is a
+    disassembler.  I am toying with the idea of not writing an editor for x4
+    but to have it open each users default editor by looking in the $EDITOR
+    environment variable.  Not sure yet :)
+
+    Contributing
+    ------------
+
+    Contributions to the x4 project are very welcome.  I will accept any
+    source file for inclusion into this project if it conforms to certain
+    rules of mine...
+
+    I will gladly accept any source file that contains tabs and quietly
+    store it in /dev/null for safe keeping.  Any file containing upper case
+    characters (other than inside a .") or one not properly commented shall
+    be quietly consigned to the same storage device.  As will any source
+    file containing lines longer than 75 characters.
+
+    Sources that look untidy or that are cluttered with obfuscated
+    defines....
+
+    %define foo (blah << 6 && ((fudge >> 2) ^ (wtf << 3)))
+
+    ...where blah, fudge and wtf are equally indecernable will be deleted
+    and the author put on permanant ignore.  This is NOT c!
+
+    x4 soruces are neither obfuscated nor visually cluttered.  There is no
+    code therein whose funcion is so very cleverly hidden to all but the
+    'l33t'.  It 'was' hard to write but anyone who thinks that is a good
+    reason to make it hard to read need not apply here.
+
+    If however you can write something other than write only code and are
+    willing to put some time and effort into this project you would be most
+    welcome.  x4 however is not ans compliant.  It will probably also remain
+    non-compliant.  Please review the sources to see whats there and what
+    isnt.  If its missing its either deliberate or an oopts :)
+
+    This "attitude" is derived from my having to deal with very pooly
+    constructed sources on a professional level.  Try working as a
+    consultant for a while and you will soon learn to hate most other
+    peoples code :) The biggest problem is the tabs, tabs are evil!
+
+    Contacting
+    ----------
+
+    If I am online then I am I440r on irc in #forth on the open projects
+    network (irc.freenode.net).  If you join that channel you will find a
+    very active channel which has large idle times.  If I am in there hang
+    arround and I'll notice you eventually.  Im usually trying to code too
+    :)
+
+    My ICQ is 22111215, yahoo is mark4th_47909 and on Aim I use I440r (which
+    stands for Ibanez 440 radius - my guitar).
+
+    My email is mark4th -at- gmail -dot- com
+
+    Dedications
+    -----------
+
+    Without a doubt, x4 is dedicated to Chuck Moore.  Laxen and Perry are a
+    close second (each :) My Father gets a mention here too.  He Introduced
+    me to Forth :) TCN Gets a very big dedication for getting x4 to work. 
+    Tom Zimmer deserves credit - x4 is loosly based on FPC :)
+        Without FPC I doubt I would be a forth coder
+    Linus T. Deserves credit for writing a true hackers operating
+        system - Linux deserves a good Forth!
+    Belatedly i would like to give MrReach from my #forth channel
+        thanks for helping me on occasions too numerous to count
+    And while im at it I should probably thank Tathi for his work
+        on the PPC Linux version of x4 which is no longer maintained
+
+    The list will probably grow (I hope :)
+
+    \s

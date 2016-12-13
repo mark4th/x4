@@ -1,0 +1,35 @@
+
+Addendum to the license of the x4 Compiler
+--------------------------------------------------------------------------
+
+Unless otherwise stated, the entire sources for the x4 compiler are released
+under a modifed LGPL licence allowing you to use x4 to create commercial
+applications without requiring that you release your source code.
+
+This means that as long as you compiled your application using THIS
+compiler none of your applications sources shall be subject to any part of
+any variaton of the GPL licence.  If however you take part of this compiler
+and use it wihtin your own compiler without permission then your compiler in
+it's entirety shall be coverd by MY license.
+
+This applies to any part of the x4 compiler sources other than those which
+might be overed by "acceptable use".  For example, I cannot in good faith
+claim any copyright on the forth word ?: even though I have never seen it's
+like in any other Forth compiler.  If you place a definition for ?: or other
+such words within your compiler then that would be considerd an acceptable
+use.  I claim no copyright on any individual Forth definitions, even the
+ones I think I invented.
+
+If however you take the entire curses module or the memory manager or some
+other such module in part or in full without prior permission then this
+shall not be coverd by acceptable use and you shall be required to release
+100% of your sources under my modified LGPL license.
+
+Permission to use any module within the x4 source tree is hereby granted to
+Forth Inc and to Ron Oliver.  Though...  I doubt either will :)
+
+  -----------------
+  Mark I Manning IV
+  -----------------
+
+==========================================================================

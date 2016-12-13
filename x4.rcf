@@ -1,0 +1,13 @@
+\ x4.rcf       - x4 custom initiliazation
+\ ------------------------------------------------------------------------
+
+\ copy this file to your home direcory and rename it to .x4.rcf
+\ and it will be automaticlaly loaded by x4 after all default
+\ initialization chains have been run (just prior to jumping to quit).
+
+\ ------------------------------------------------------------------------
+\ if command history (cursor up down) does not work enable the following
+
+\  smkx              \ enable cursor keys in terminal
+
+\ ========================================================================
