@@ -193,17 +193,17 @@ create identity
   origin     e,             \ e_entry
   elf_header e,             \ e_phoff
 
-  hhere \ $3ff + -$400 and    \ address of start of string section
-
+  hhere                     \ address of start of string section
+  $1000 + -$1000 and
   dup !> ss-addr st_len +   \ remember str section address
   dup !> sh-addr            \ remember section headers addres
 
-    elf0 -   e,             \ e_shoff
+  elf0 -     e,             \ e_shoff
 
   0          e,             \ e_flags
   elf_header ew,            \ e_ehsize
   prg_header ew,            \ e_phentsize
-  3          ew,            \ e_phnum
+  2          ew,            \ e_phnum
   sec_header ew,            \ e_shentsize
   4          ew,            \ e_shnum
   3          ew,            \ e_shstrndx
@@ -212,11 +212,6 @@ create identity
 
 \ ------------------------------------------------------------------------
 \ initialize program headers
-
-\ fsave is not going to use a .bss but the kernel build created one
-\ for kernel.com. we erase the text sections program header so we can
-\ fill in the blanks but we also erase the kernel.com bss program
-\ header.  the pax header we dont touch (not till i rtfm that :)
 
 : phdr!         ( --- )
   elf0 elf_header +         \ get address of program headers
@@ -243,7 +238,6 @@ create identity
   1MEG ss-addr elf0 - - e,  \ memory size
   PF_RW            e,
   $1000            e,
-
   drop ;
 
 \ ------------------------------------------------------------------------
@@ -258,34 +252,31 @@ create identity
 : shdr!        ( --- )
   sh-addr                   \ get address for section headers
   dup sec_header erase      \ first section header is always null
+      sec_header +          \ point to second secton header
 
-  sec_header +              \ point to second secton header
-
-  1              e,         \ name              \ .text
+  1              e,         \ name   .text
   SHT_PROGBITS   e,         \ type
   SHF_AX         e,         \ flags
   origin         e,         \ addr
   hsz            e,         \ offset
-  hhere origin - \ $3ff + -$400 and
-                 e,         \ size
+  hhere origin - e,         \ size
   0              e,         \ link
   0              e,         \ info
   16             e,         \ align
   0              e,         \ entsize
 
-  7              e,         \ name
+  7              e,         \ name   .bss
   SHT_NOBITS     e,         \ type
   SHF_WA         e,         \ flags
   ss-addr        e,         \ addr
   ss-addr elf0 - e,         \ offset
-  1MEG ss-addr elf0 - -
-                 e,  \ size
-  0              e,
-  0              e,
-  4              e,
-  0              e,
+  1MEG ss-addr elf0 - - e,  \ size
+  0              e,         \ link
+  0              e,         \ info
+  1              e,         \ align
+  0              e,         \ entsize
 
-  12             e,         \ name              \ .shstrtab
+  12             e,         \ name   .shstrtab
   SHT_STRTAB     e,         \ type
   0              e,         \ flags
   0              e,         \ addr
@@ -322,7 +313,7 @@ create identity
     >r                      \ save fd to return stack
     off> >in off> #tib      \ so targets tib is empty on entry
     sh-addr                 \ calculate length of file...
-    sec_header 4 * +        \ i.e. address of end of section headers
+    sec_header 4* +         \ i.e. address of end of section headers
     elf0 -                  \ minus address of start of process
     elf0 r@ <write>         \ start address of file data
     <close>                 \ write/close file
