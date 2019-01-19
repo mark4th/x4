@@ -203,7 +203,7 @@ colon 'flrefill', flrefill
 ; ------------------------------------------------------------------------
 ; fload file whose name is an ascii string
 
-;     ( a1 --- )
+;     ( 0 0 a1 --- )
 
 colon '(fload)', pfload
   dd sys_open3              ; attempt to open specified file
