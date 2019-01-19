@@ -3,7 +3,7 @@
 
 %define ALIAS $20           ; lex flag: mark word as alias
 %define IMM   $40           ; lex flag: mark word as immediate
-%define LEX   $1f           ; max to remove lex bits from cfa length
+%define LEX   $1f           ; mask to remove lex bits from cfa length
 %define CELL  4             ; size of once memory cell
 %define BODY  5             ; length of cfa = 5 bytes for call opcode
 %define MEMSZ $100000       ; one meg
