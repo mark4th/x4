@@ -273,4 +273,35 @@ colon 'neither', neither
   dd dashrot, notequals, andd
   dd exit
 
+; ------------------------------------------------------------------------
+
+code "%?", numbits
+  mov eax, ebx
+  xor ebx, ebx
+.L0:
+  cmp eax, byte 0
+  jz .L1
+  inc ebx
+  mov ecx, eax
+  dec ecx
+  and eax, ecx
+  jmp .L0
+.L1:
+  next
+
+;-------------------------------------------------------------------------
+; create mask for bitfield of width len and position pos
+
+; ( len pos --- mask )
+
+code "field", field
+  pop ecx
+  mov eax, 1
+  lsl eax, ecx
+  dec eax
+  lsl eax, ebx
+  mov ebx, eax
+  next
+
+
 ;=========================================================================
