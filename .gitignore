@@ -1,3 +1,4 @@
 *.sublime*
 kernel.com
+src/kernel.o
 x4
