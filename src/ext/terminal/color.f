@@ -4,51 +4,47 @@
   .( color.f )
 
 \ ------------------------------------------------------------------------
-\ colours   (yes guys, there really is a letter 'u' in there)
 
   headers>
 
-  0 const black          \ except in gnome terminal
-  1 const red
-  2 const green
-  3 const yellow
-  4 const blue
-  5 const magenta
-  6 const cyan
-  7 const white
+enum: colours               \ colours : yes guys, there really is a
+  := black                  \ letter 'u' in there
+  := red
+  := green
+  := yellow
+  := blue
+  := magenta
+  := cyan
+  := white
+;enum
+
+\ ------------------------------------------------------------------------
+\ character attributes
+
+enum: attrs
+  1 /= :standout:
+  2 /= :underline:
+  4 /= :reverse:
+  8 /= :bold:
+ 16 /= :alt:             \ alt charset (ibm box charset)
+;enum
 
 \ ------------------------------------------------------------------------
 
-  1 const :standout:
-  2 const :underline:
-  4 const :reverse:
-  8 const :bold:
- 16 const :alt:         \ alt charset (ibm box charset)
-
-\ ------------------------------------------------------------------------
-
-  0 var fg                  \ current foreground colour
-  0 var bg                  \ current background colour
   0 var attrib              \ current color atributes + bold/standout etc
 
 \ ------------------------------------------------------------------------
-\ set new foreground
 
   <headers
 
-: (>fg)         ( n1 --- )
-  dup attrib $fff0 and      \ mask out old fg from attrib variable
-  + !> attrib               \ change fg and set variable
-  !> fg ;                   \ remember current fg attrib
+: (>attr)       ( n1 mask --- )
+  attrib and or
+  !> attrib ;
 
 \ ------------------------------------------------------------------------
-\ set new background
 
-: (>bg)         ( n1 --- )
-  dup 4 <<                  \ shift attrib into position
-  attrib $ff0f and          \ mask out old bg
-  + !> attrib               \ reset
-  !> bg ;                   \ remember current bg attrib
+: (>fg)         ( n1 --- )      $fff0 (>attr) ;
+: (>bg)         ( n1 --- ) 4 << $ff0f (>attr) ;
 
 \ ------------------------------------------------------------------------
 \ set new foreground or background colors
@@ -59,18 +55,21 @@
 : >bg           ( n1 --- ) dup (>bg) setab ;
 
 \ ------------------------------------------------------------------------
-\ set both fg and bg
+
+: fg            ( --- n1 ) attrib $f and ;
+: bg            ( --- n1 ) attrib $f0 and 4 >> ;
+
+\ ------------------------------------------------------------------------
 
 : >attrib       ( n1 --- )
-  dup
-  $f and >fg
-  4 >> >bg ;
+  $ff00 (>attr)
+  fg setaf
+  bg setab ;
 
 \ ------------------------------------------------------------------------
 \ combine fg and bg colors into a single 8 bit attribute
 
-: >color    ( fg bg --- )
-  4 << + ;                  \ useful for tui init code
+: >color        ( fg bg --- ) 4 << or ;
 
 \ ------------------------------------------------------------------------
 \ turn various attributes on and off
@@ -109,10 +108,9 @@
   headers>
 
 : >pref     ( c1 --- )
-  dup 8 <<
-  attrib $ff and or
-  !> attrib (>pref)
-  fg >fg bg >bg ;           \ restore the damned colors
+  dup 8 << $ff (>attr)
+  (>pref)
+  fg setaf bg setab ;          \ restore the damned colors
 
 \ ------------------------------------------------------------------------
 

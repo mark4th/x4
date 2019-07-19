@@ -81,7 +81,6 @@
   cell+ incr ;
 
 \ ------------------------------------------------------------------------
-\ not too sure about these two (did i get them right ?)
 
 : %s fsp> count bounds do i c@ c>$ loop ;
 : %l fsp> c@ >fsp ;
@@ -112,15 +111,15 @@
   begin
     f$@ dup '}' <>
   while
-    swap 10 * +
+    '0' - swap 10 * +
   repeat
-  >fsp ;
+  drop >fsp ;
 
 \ ------------------------------------------------------------------------
 \ these are both noops
 
- ' noop alias %?            \ start a conditional
- ' noop alias %;            \ end a conditional
+  ' noop alias %?            \ start a conditional
+  ' noop alias %;            \ end a conditional
 
 \ ------------------------------------------------------------------------
 \ this is where we actually test and act on the condition
@@ -153,16 +152,13 @@
   []@ >fsp ;
 
 \ ------------------------------------------------------------------------
+\ handles case where a specific number of digits is expected in format $
 
   0 var #d                  \ 2 or 3 digits required (see below)
 
-: (%d)      ( n1 --- )
-  #d 0=
-  if
-    0 <# #s #>
-  else
-    0 <# #d rep # #>
-  then ;
+: d-any     ( n1 --- )   0 <# #s #> ;
+: d#        ( n1 --- )   0 <# #d rep # #> ;
+: (%d)      ( n1 --- )   #d ?: d# d-any off> #d ;
 
 \ ------------------------------------------------------------------------
 \ write number to output sequence
@@ -179,18 +175,15 @@
 \ ------------------------------------------------------------------------
 
 : ?digit        ( c1 --- c1 | c2 )
-  dup '2' '3' either
-  if
-    $f and !> #d
-    f$@                     \ this better be a 'd' :)
-  then ;
+  dup '2' '3' neither ?exit
+  $f and !> #d f$@ ;        \ this better be a 'd' :)
 
 \ ------------------------------------------------------------------------
 \ we parsed a % char from the format string.
 
 : (%)       ( ... c1 --- )
   f$@ nip                   \ get % command char from format string
-  ?digit
+  ?digit                    \ used in %d to set number of digits
   case:                     \ execute command
     '%' opt %%  'p' opt %p
     'd' opt %d  'c' opt %c
@@ -228,6 +221,7 @@
 \ write compiled escape sequence to stdout
 
   headers>
+
 
 : (.$buffer)    ( --- )
   #$buffer $buffer          \ count address

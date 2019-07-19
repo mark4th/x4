@@ -26,6 +26,8 @@
   var info-name
   var info-letter
 
+  0 var wide
+
 \ ------------------------------------------------------------------------
 
   create env_term  ," TERM"
@@ -78,9 +80,6 @@
 
   defer .$buffer            \ write whole output buffer (to display?)
 
-\ ------------------------------------------------------------------------
-\ gnome terminals have black = 15 just to be stupid (erm different i mean)
-
   <headers
 
 \ ------------------------------------------------------------------------
@@ -129,22 +128,49 @@
   104 ?alloc !> A-Z ;
 
 \ ------------------------------------------------------------------------
+\ terminfo file header format
+
+struct: header
+  1 dw tmagic               \ magic number
+  1 dw tnames               \ length of terminal names section
+  1 dw tbool                \ length of boolean section
+  1 dw tnumbers             \ # of 16/32 bit items in numbers section
+  1 dw tstrings             \ number of strings in string section
+  1 dw stsize               \ size in bytes of string table
+;struct
+
+\ ------------------------------------------------------------------------
 \ initialize pointers to each section within terminfo file
 
+: ?wide wide ?: 4* 2* ;
+: talign dup 1 and + ;
+: +dup + dup ;
+
 : init-pointers
-  terminfo dup>r 12 + !> t-names
-  r@ 2+ w@ t-names + !> t-bool
-  r@ 4+ w@ t-bool + dup 1 and + !> t-numbers
-  r@ 6 + w@ 2* t-numbers + !> t-strings
-  r> 8 + w@ 2* t-strings + !> t-table ;
+  terminfo dup>r header           +dup !> t-names
+  r@ tnames   w@                  +dup !> t-bool
+  r@ tbool    w@ + talign          dup !> t-numbers
+  r@ tnumbers w@ ?wide            +dup !> t-strings
+  r> tstrings w@ 2* + talign           !> t-table ;
+
+\ ------------------------------------------------------------------------
+
+: valid   ( magic --- )
+  $21e = !> wide ;          \ set wide = true for extended terminfo files
+
+\ ------------------------------------------------------------------------
+
+: invalid
+  ." Terminfo: Bad Magic!"
+  bye ;
 
 \ ------------------------------------------------------------------------
 \ quits forth if terminfo file is corrupted
 
 : valid?
-  terminfo w@ \0432 = ?exit
-  ." Terminfo - Bad Magic!"
-  bye ;
+  terminfo w@ dup
+  $11a $21e either
+  ?: valid invalid ;
 
 \ ------------------------------------------------------------------------
 \ read terminfo file and calculate addresses for each section therein
@@ -169,6 +195,10 @@
 : >params       ( ... n1 --- )
   params 36 erase         \ zero all parameters
   ?dup 0= ?exit
+  ?dup 9 >
+  if
+    rep drop exit
+  then
   for
     params r@ []!
   nxt ;
