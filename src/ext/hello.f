@@ -7,6 +7,8 @@
 
   <headers
 
+  defer init-hello
+
   0 var dohello
 
   screen: hscr              \ hello screen
@@ -57,12 +59,9 @@ create win-dat
   for
     count dup bl =
     if
-      hwin win-cx@ 0 34 either
-      if
-        black hwin win-color!
-      else
-        white blue >color hwin win-color!
-      then
+      white hwin win-cx@ 0 34 either
+      ?: black blue
+      >color hwin win-color!
     else
       green black >color hwin win-color!
     then
@@ -73,10 +72,11 @@ create win-dat
 \ ------------------------------------------------------------------------
 \ initialize hello screen and window
 
-: init-hello
+: (init-hello)
   cols rows hscr (screen:) drop
   35 8 hwin (window:)      drop
 
+  hscr scr-clr
   hscr hwin win-attach
   hwin win-clr
 
@@ -118,12 +118,16 @@ create win-dat
 
 \ ------------------------------------------------------------------------
 
+: re-hello hscr scr-refresh ;
+
+\ ------------------------------------------------------------------------
+
   headers>
 
 : hello
   clear init-hello
+  ['] re-hello is init-hello
   hscr scr-clr
-
   hscr .screen
   white >fg
   rows 10 - 0 at ;
@@ -146,8 +150,8 @@ create win-dat
   defers default
   timer-reset               \ start timer for how long x4 is active
   intty not ?exit
+  ['] (init-hello) is init-hello
   on> dohello               \ enable "hello"
-  init-hello
   hello ;                   \ run hello
 
 \ ------------------------------------------------------------------------
