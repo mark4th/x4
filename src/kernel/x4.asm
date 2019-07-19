@@ -98,6 +98,7 @@ code '@map', fmap
 
   mov ebx, -1
   next
+
 .L1:
   push eax
   xor ebx, ebx
