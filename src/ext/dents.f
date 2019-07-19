@@ -73,14 +73,16 @@ struct: DIRENT_T
 
   headers>
 
-  1 const DT_FIFO
-  2 const DT_CHR
-  4 const DT_DIR
-  6 const DT_BLK
-  8 const DT_REG
- 10 const DT_LINK
- 12 const DT_SOCK
- 14 const DT_WHT
+enum: DT_TYPES
+  1 /= DT_FIFO
+  2 /= DT_CHR
+  4 /= DT_DIR
+  6 /= DT_BLK
+  8 /= DT_REG
+ 10 /= DT_LINK
+ 12 /= DT_SOCK
+ 14 /= DT_WHT
+;enum
 
 \ ------------------------------------------------------------------------
 \ opens a directory for read, returns status
