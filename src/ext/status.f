@@ -68,7 +68,7 @@
   base dup>r attrib
 
   0 >pref
-  blue >bg white >fg
+  white blue >color >attrib
   0 0 at
 
   decimal curoff
