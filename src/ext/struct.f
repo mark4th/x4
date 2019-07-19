@@ -4,8 +4,6 @@
   .( loading struct.f ) cr
 
 \ ------------------------------------------------------------------------
-\ idea stolen fair and square off MrReach - ill call this his code
-\ ------------------------------------------------------------------------
 
   compiler definitions
 
@@ -19,6 +17,15 @@
   0 const               \ create named structure
   here cell-            \ remember body field address
   0 ;                   \ current size of structure
+
+\ ------------------------------------------------------------------------
+
+' struct: alias enum:
+
+\ ------------------------------------------------------------------------
+
+: := ( n1 --- n2 )    dup constant 1+ ;
+: /= ( xx n1 --- n2 ) nip := ;
 
 \ ------------------------------------------------------------------------
 \ create a named field to index n1 of size n2
@@ -38,6 +45,8 @@
 
 : ;struct       ( a1 n1 --- )
   swap ! ;
+
+  ' ;struct alias ;enum
 
 \ ------------------------------------------------------------------------
 
