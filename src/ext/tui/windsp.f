@@ -10,8 +10,6 @@
     \ yy = fg/bg colors
     \ cc = char
 
-\ bug: this is not honoring rev or standout attributes.
-
 : +attrs        ( c1 win --- 00xxyycc )
   dup>r win-attr@ 8 <<
   r> win-color@ or 8 << or ;
@@ -54,9 +52,6 @@
 
 \ ------------------------------------------------------------------------
 \ scroll window up
-
-\ modify this to copy all lines being scrolled in 1 go
-\ not 1 line at a time
 
 : scroll-up     ( win --- )
   dup win-height@ 1- 0
@@ -225,7 +220,7 @@
   align, ; immediate
 
 \ ------------------------------------------------------------------------
-\ clear window with default attrib and blank char (doesnt clear box)
+\ clear window with default attrib and blank char
 
 : win-clr     ( win --- )
   dup win-height@
@@ -248,7 +243,7 @@
 : <fill     ( win --- )
   bl over win-blank!
   win-filled not swap
-  win.flags tuck w!
+  win.flags tuck w@
   and swap w! ;
 
 \ ------------------------------------------------------------------------
