@@ -87,8 +87,6 @@ create masks
 \ allocation or if we need to utilize a descriptor from the next
 \ largest chain.  This would speed up allocations greatly.
 
-\ we could also use skip lists and make the search blazing
-
 \ ------------------------------------------------------------------------
 
 : add-free      ( mem-map mem-blk --- )  f-magic add-mem ;
