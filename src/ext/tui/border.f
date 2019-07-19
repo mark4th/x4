@@ -15,8 +15,7 @@
 \ write char + attribs to screen at index
 
 : bemit     ( chr ix win --- )
-  rot over +battrs >r
-  win-scr@ r> char1! ;
+  rot swap +battrs char1! ;
 
 \ ------------------------------------------------------------------------
 \ increment index and discard char that was displayed already
