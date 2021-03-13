@@ -36,18 +36,20 @@ struct: modifier
  0 var height
  0 var frames
  0 var start
- 
+
 \ ------------------------------------------------------------------------
 \ mental note to self: need to add a winch handler here somewhere
 
 : init-windows
+  main-screen scr-clr
+
   cols    rows     main-screen (screen:)
   cols 2- rows 3 - backdrop    (window:)
   width height     main-win    (window:)
 
-  black 4 << white or main-win win-color!
-  blue  4 << white or backdrop win-color!
-  blue  4 << cyan  or backdrop win-bcolor!
+  white black >color main-win win-color!
+  white blue  >color backdrop win-color!
+  cyan blue   >color backdrop win-bcolor!
 
   main-win >locked
   backdrop >fill            \ put a border on the backdrop window
@@ -331,7 +333,7 @@ create bolds
   2dup draw_point           \ draw this point
   r@ 2* points +            \ save this point
   tuck 1+ c! c!
-  r> 1+ 
+  r> 1+
   incr> frames ;
 
 \ ------------------------------------------------------------------------
@@ -339,8 +341,8 @@ create bolds
   0 var fps
 
 : .fps
-  cyan >bg white >fg >bold 
-  2 3 at ."  fps:" fps . 
+  cyan >bg white >fg >bold
+  2 3 at ."  fps:" fps .
   black >bg white >fg ;
 
 \ ------------------------------------------------------------------------

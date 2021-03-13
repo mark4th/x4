@@ -69,6 +69,45 @@ code '[]!', cells_store
   next
 
 ; ------------------------------------------------------------------------
+
+;       ( a1 ix --- w1 )
+
+code '[w]@', words_fetch
+  pop eax
+  movzx bx, [eax +2* ebx]
+  next
+
+; ------------------------------------------------------------------------
+
+;       ( w1 a1 ix --- )
+
+code '[w]!', words_store
+  pop eax
+  pop ecx
+  mov word[eax +2* ebx], cx
+  pop ebx
+  next
+
+; ------------------------------------------------------------------------
+
+;       ( a1 ix --- c1 )
+
+code '[c]@', chars_fetch
+  pop eax
+  movzx ebx, byte [eax + ebx]
+  next
+
+; ------------------------------------------------------------------------
+
+;	( c1 a1 ix --- )
+
+code '[c]!', chars_store
+  pop eax
+  pop ecx
+  mov byte [eax + ebx], cl
+  next
+      
+; ------------------------------------------------------------------------
 ; fetch data from address (fetches 32 bits)
 
 ;       ( a1 --- n1 )
@@ -123,7 +162,7 @@ code 'w@', wfetch
 
 code 'w!', wstore
   pop eax
-  mov [ebx], ax
+  mov word [ebx], ax
   pop ebx
   next
 
@@ -157,6 +196,15 @@ code 'count', count
 code 'dcount', dcount
   mov ecx, [ebx]
   add ebx, byte 4
+  push ebx
+  mov ebx, ecx
+  next
+
+; ------------------------------------------------------------------------
+
+code 'wcount', wcount
+  movzx ecx, word [ebx]
+  add ebx, byte 2
   push ebx
   mov ebx, ecx
   next
@@ -442,7 +490,7 @@ code 'upc', upc
   next
 
 ; ------------------------------------------------------------------------
-; compare 2 strings. returns -1 if they match, 0 if not.
+; compare 2 strings.
 
 ;       ( a1 a2 n1 --- -1 | 0 | 1 )
 

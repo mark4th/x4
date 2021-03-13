@@ -33,9 +33,7 @@
 : [].flush      ( stack --- )       dup [].size@ swap [].sp! ;
 
 \ ------------------------------------------------------------------------
-\ allocate space for stack
-
-  <headers
+\ allocate space for a stack
 
 : alloc-stack   ( stack --- )
   dup [].size@ cells        \ get requested size in bytes
@@ -48,6 +46,8 @@
 
 \ ------------------------------------------------------------------------
 \ scan through all stacks, allocate them and reset stack pointers
+
+  <headers
 
 : init-stacks   ( --- )
   defers default            \ link into low priority default init
@@ -119,10 +119,20 @@
   true ;
 
 \ ------------------------------------------------------------------------
+
+: [].depth    ( stack --- depth )
+  dup [].size@
+  swap [].sp@ - ;
+
+\ ------------------------------------------------------------------------
 \ we could get real crazy here... .. .
 
 \ : [].swap     ( stack --- f1 ) todo ? ;
 \ : [].rot      ( stack --- f1 ) todo ? ;
 \ : [].nip      ( stack --- f1 ) todo ? ;
+
+\ ------------------------------------------------------------------------
+
+  behead
 
 \ ========================================================================

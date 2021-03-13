@@ -72,21 +72,13 @@
   context count             \ scan through context stack
   cells bounds
   do
-    i @                     \ get vocabulary address from contexzt
+    i @                     \ get vocabulary address from context
     over =                  \ are we forgetting this vocabulary ?
     if
-    ( dup )                 \ retain a1
-      dup dovoc ( drop )    \ trickerty, see below - bring voc a1 to top
-      previous              \ discard top item of context stack (now a1)
+      dup dovoc             \ rotate this voc out to top of context
+      previous              \ and remove it from context
     then
   loop ;
-
-\ normally when you invoke a vocabulary its cfa calls dovoc.  this leaves
-\ the body address of the vocabulary on the stack for dovoc's pleasure.
-\ we cannot just do "address dovoc" because address would be in ebx
-\ because top of stack is cached.  so, to force address to be on the
-\ stack itself when we call dovoc i push a second item onto the stack
-\ which we later drop
 
 \ ------------------------------------------------------------------------
 \ unlink vocabularies above forgotten word

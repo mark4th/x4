@@ -31,18 +31,22 @@ struct: elf_header
 \ ------------------------------------------------------------------------
 \ e_type
 
-  0 const ET_NONE           \ no file type
-  1 const ET_REL            \ relocatble file
-  2 const ET_EXEC           \ executable file
-  3 const ET_DYN            \ shared object
-  4 const ET_CORE           \ ok so why am i including this one again?
+enum: ET_TYPES
+  := ET_NONE                \ no file type
+  := ET_REL                 \ relocatble file
+  := ET_EXEC                \ executable file
+  := ET_DYN                 \ shared object
+  := ET_CORE                \ ok so why am i including this one again?
+;enum
 
 \ ------------------------------------------------------------------------
 \ e_machine
 
-  3 const EM_386            \ intel
-  8 const EM_MIPS           \ todo!
- 20 const EM_PPC            \ not in my copy of the std but i trust tathi
+enum: EM_TYPES
+  3 /= EM_386               \ intel
+  8 /= EM_MIPS              \ todo!
+ 20 /= EM_PPC               \ not in my copy of the std but i trust tathi
+;enum
 
 \ ------------------------------------------------------------------------
 \ structure of a program header
@@ -60,19 +64,23 @@ struct: prg_header
 
 \ ------------------------------------------------------------------------
 
-  0 const PT_NULL
-  1 const PT_LOAD
-  2 const PT_DYNAMIC
-  3 const PT_INTERP
-  4 const PT_NOTE
-  5 const PT_SHLIB
-  6 const PT_PHDR
+enum: PT_TYPES
+  := PT_NULL
+  := PT_LOAD
+  := PT_DYNAMIC
+  := PT_INTERP
+  := PT_NOTE
+  := PT_SHLIB
+  := PT_PHDR
+;enum
 
 \ ------------------------------------------------------------------------
 
-  1 const PF_X
-  2 const PF_W
-  4 const PF_R
+enum: PF_TYPES
+  1 /= PF_X
+  2 /= PF_W
+  4 /= PF_R
+;enum
 
   PF_X PF_R or const PF_RX
   PF_R PF_W or const PF_RW
@@ -94,27 +102,29 @@ struct: sec_header
 ;struct
 
 \ ------------------------------------------------------------------------
-\ sh_type
 
-  0 const SHT_NULL
-  1 const SHT_PROGBITS
-  2 const SHT_SYMTAB
-  3 const SHT_STRTAB
-  4 const SHT_RELA
-  5 const SHT_HASH
-  6 const SHT_DYNAMIC
-  7 const SHT_NOTE
-  8 const SHT_NOBITS
-  9 const SHT_REL
- 10 const SHT_SHLIB
- 11 const SHT_DYNSYM
+enum: SH_TYPES
+  := SHT_NULL
+  := SHT_PROGBITS
+  := SHT_SYMTAB
+  := SHT_STRTAB
+  := SHT_RELA
+  := SHT_HASH
+  := SHT_DYNAMIC
+  := SHT_NOTE
+  := SHT_NOBITS
+  := SHT_REL
+  := SHT_SHLIB
+  := SHT_DYNSYM
+;enum
 
 \ ------------------------------------------------------------------------
-\ sh_flags
 
-  1 const SHF_WRITE
-  2 const SHF_ALLOC
-  4 const SHF_EXEC
+enum: SH_FLAGS
+  1 /= SHF_WRITE
+  2 /= SHF_ALLOC
+  4 /= SHF_EXEC
+;enum
 
   SHF_ALLOC SHF_EXEC or const SHF_AX
   SHF_ALLOC SHF_WRITE or const SHF_WA
@@ -133,8 +143,8 @@ create $table
 \ ------------------------------------------------------------------------
 \ decompiler needs this too
 
-  origin $fffff000 and const elf0
-  origin elf0 - const hsz
+  origin $ffff8000 and const ELF0
+  origin ELF0 - const hsz
 
 \ ------------------------------------------------------------------------
 \ used to calculate bss size
@@ -184,7 +194,7 @@ create identity
 \ initilize elf headers at start of process address space
 
 : ehdr!         ( --- )
-  elf0 identity over        \ copy elf identity into elf header
+  ELF0 identity over        \ copy elf identity into elf header
   16 cmove 16 +
 
   ET_EXEC    ew,            \ e_type
@@ -193,17 +203,17 @@ create identity
   origin     e,             \ e_entry
   elf_header e,             \ e_phoff
 
-  hhere \ $3ff + -$400 and    \ address of start of string section
-
+  hhere                     \ address of start of string section
+  $1000 + -$1000 and
   dup !> ss-addr st_len +   \ remember str section address
   dup !> sh-addr            \ remember section headers addres
 
-    elf0 -   e,             \ e_shoff
+  ELF0 -     e,             \ e_shoff
 
   0          e,             \ e_flags
   elf_header ew,            \ e_ehsize
   prg_header ew,            \ e_phentsize
-  3          ew,            \ e_phnum
+  2          ew,            \ e_phnum
   sec_header ew,            \ e_shentsize
   4          ew,            \ e_shnum
   3          ew,            \ e_shstrndx
@@ -213,37 +223,31 @@ create identity
 \ ------------------------------------------------------------------------
 \ initialize program headers
 
-\ fsave is not going to use a .bss but the kernel build created one
-\ for kernel.com. we erase the text sections program header so we can
-\ fill in the blanks but we also erase the kernel.com bss program
-\ header.  the pax header we dont touch (not till i rtfm that :)
-
 : phdr!         ( --- )
-  elf0 elf_header +         \ get address of program headers
+  ELF0 elf_header +         \ get address of program headers
   dup prg_header 2* erase   \ start fresh
 
   \ .text
 
   PT_LOAD          e,       \ loadable
   0                e,       \ file offset
-  elf0             e,       \ virtual address
-  elf0             e,       \ physical address
-  ss-addr elf0 -   e,       \ file size
-  ss-addr elf0 -   e,       \ memory size
+  ELF0             e,       \ virtual address
+  ELF0             e,       \ physical address
+  ss-addr ELF0 -   e,       \ file size
+  ss-addr ELF0 -   e,       \ memory size
   PF_RX            e,       \ +r +w +x etc
   $1000            e,       \ set alignment
 
   \ .bss
 
   PT_LOAD          e,       \ loadable
-  ss-addr elf0 -   e,       \ file offset
+  ss-addr ELF0 -   e,       \ file offset
   ss-addr          e,       \ virtual address
   ss-addr          e,       \ physical address
   0                e,       \ file size
-  1MEG ss-addr elf0 - - e,  \ memory size
+  1MEG ss-addr ELF0 - - e,  \ memory size
   PF_RW            e,
   $1000            e,
-
   drop ;
 
 \ ------------------------------------------------------------------------
@@ -261,35 +265,33 @@ create identity
 
   sec_header +              \ point to second secton header
 
-  1              e,         \ name              \ .text
+  1              e,         \ name     .text
   SHT_PROGBITS   e,         \ type
   SHF_AX         e,         \ flags
   origin         e,         \ addr
   hsz            e,         \ offset
-  hhere origin - \ $3ff + -$400 and
-                 e,         \ size
+  hhere origin - e,         \ size
   0              e,         \ link
   0              e,         \ info
   16             e,         \ align
   0              e,         \ entsize
 
-  7              e,         \ name
+  7              e,         \ name     .bss
   SHT_NOBITS     e,         \ type
   SHF_WA         e,         \ flags
   ss-addr        e,         \ addr
-  ss-addr elf0 - e,         \ offset
-  1MEG ss-addr elf0 - -
-                 e,  \ size
-  0              e,
-  0              e,
-  4              e,
-  0              e,
+  ss-addr ELF0 - e,         \ offset
+  1MEG ss-addr ELF0 - - e,  \ size
+  0              e,         \ link
+  0              e,         \ info
+  1              e,         \ align
+  0              e,         \ entsize
 
-  12             e,         \ name              \ .shstrtab
+  12             e,         \ name     .shstrtab
   SHT_STRTAB     e,         \ type
   0              e,         \ flags
   0              e,         \ addr
-  ss-addr elf0 - e,         \ offset
+  ss-addr ELF0 - e,         \ offset
   st_len         e,         \ size
   0              e,         \ link
   0              e,         \ info
@@ -322,9 +324,9 @@ create identity
     >r                      \ save fd to return stack
     off> >in off> #tib      \ so targets tib is empty on entry
     sh-addr                 \ calculate length of file...
-    sec_header 4 * +        \ i.e. address of end of section headers
-    elf0 -                  \ minus address of start of process
-    elf0 r@ <write>         \ start address of file data
+    sec_header 4* +         \ i.e. address of end of section headers
+    ELF0 -                  \ minus address of start of process
+    ELF0 r@ <write>         \ start address of file data
     <close>                 \ write/close file
   else
     ." fsave failed!" cr

@@ -1,4 +1,3 @@
 #! /bin/bash
-
-mv x4 x4-old
+mv x4 x4_old
 printf "fload src/x4.f\n" | ./kernel.com

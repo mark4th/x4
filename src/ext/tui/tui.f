@@ -147,8 +147,8 @@ struct: win
 
 \ ------------------------------------------------------------------------
 
-: win-cuf      ( win --- ) 
-  dup>r win-cx@ 1+ 
+: win-cuf      ( win --- )
+  dup>r win-cx@ 1+
   r> win-cx! ;
 
 \ ------------------------------------------------------------------------
@@ -174,7 +174,7 @@ struct: win
 \ ------------------------------------------------------------------------
 \ set position of window in screen
 
-\  headers>
+  headers>
 
 : winpos!       ( x y win --- )
   tuck                      \ this does not test that the specified

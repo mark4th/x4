@@ -6,7 +6,7 @@
 \ ------------------------------------------------------------------------
 \ the actual signal handler function
 
-: (alarm) 
+: (alarm)
   realarm                   \ re init alarm signal
   99 >message ;             \ throw message 99 to all catchers thereof
 
@@ -17,8 +17,8 @@
 
 \ ------------------------------------------------------------------------
 
-: (realarm) 
-  ['] alarm 14 <signal> 
+: (realarm)
+  ['] alarm 14 <signal>
   drop ;
 
 ' (realarm) is realarm
@@ -36,12 +36,12 @@
 : test
   99 ['] my-alarm +message
   begin
-    5 <alarm>               \ start a 5 second alarm clock 
-    begin 
-      ." no alarm" cr 
+    5 <alarm>               \ start a 5 second alarm clock
+    begin
+      ." no alarm" cr
       1 seconds
       got-alarm
-    until 
+    until
     off> got-alarm key?
   until
   99 ['] my-alarm -message

@@ -4,7 +4,10 @@
   _variable_ 'dp', dp, _end ; dictionary pointer - dont tuch
   _variable_ 'hp', hp, 0    ; head space pointer - dont touch
 
+; meaning 'dont touch uless you know what you are doing' :)
+
 ; ------------------------------------------------------------------------
+; align dictionary pointer to next cell
 
 code 'align,', alignc
   mov eax, dword [dp_b]

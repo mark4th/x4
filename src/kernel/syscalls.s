@@ -23,7 +23,7 @@ sys0:
   ; oopts - something fubared!
 
   neg eax                   ; get errno value
-  mov [errno+5], eax        ; set errno value for caller to handle
+  mov [errno + BODY], eax   ; set errno value for caller to handle
   mov eax, -1               ; tell caller something fubared
 
 .L1:

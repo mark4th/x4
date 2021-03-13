@@ -76,7 +76,7 @@ _fetchmap:
   push ecx                  ; prot
   push ebx                  ; size
   push 0                    ; *start
-  mov ebx, esp              ; point edx at parameters
+  mov ebx, esp              ; point ebx at parameters
   mov eax, $5a              ; mmap
   int $80
   add esp, 24
@@ -98,6 +98,7 @@ code '@map', fmap
 
   mov ebx, -1
   next
+
 .L1:
   push eax
   xor ebx, ebx
@@ -153,6 +154,6 @@ code '@map', fmap
 
 ;note:   do not define anything at all below this point
 
-_end:                       ;when x4 loads, this is where headers are
+_end:                       ; when x4 loads, this is where headers are
 
 ;=========================================================================

@@ -10,24 +10,32 @@
 \ the given format string into the output buffer.
 
 \ ------------------------------------------------------------------------
+
+  <headers
+
+: (format)  ( ... #params format --- )
+  t-table + !> f$           \ set address of format string
+  >params                   \ store parameters for format string
+  >format ;                 \ compile escape sequence from format string
+
+\ ------------------------------------------------------------------------
+
+: 0format
+  drop                      \ drop $ffff from t-strings
+  rep drop ;                \ discard parameters if any
+
+\ ------------------------------------------------------------------------
 \ create word to handle format string n1 with n2 parameters
 
 \ n1 is the offset within the terminfo files string section
 
-  <headers
-
-: format      ( ... n1 n2 --- )
+: format      ( n1 n2 --- )
   create, ,
-  does>
+  does>       ( ... --- )
     dcount                  \ fetch parameter count for format string
     swap @ t-strings + w@   \ get format string offset in t-table
     dup $ffff =             \ empty format string?
-    if                      \ an empty format string is not always an
-      2drop exit            \ error. e.g. the linux terminal has an empty
-    then                    \ enacs (enable alt char set)
-    t-table + !> f$         \ set address of format string
-    >params                 \ store parameters for format string
-    >format ;               \ compile escape sequence from format string
+    ?: 0format (format) ;
 
 \ ------------------------------------------------------------------------
 \ a hell of alot of work.... (way too much :)
@@ -241,15 +249,20 @@
 720 1 format (setab)        \ set background colorc
 
 \ ------------------------------------------------------------------------
-\ create words to write given format strings out to the display
+\ create wrappers for above supported format strings
 
 : escape
-  create ' ,
-  does>
-    @ execute
-    .$buffer ;
+  create ' ,                \ get format string being wrapperd
+  does>                     \ when invoked...
+    @ execute               \ compile format string to escape sequence
+    .$buffer ;              \ immediately write escape sequence to console
+
+\ the above .$buffer can be re-vectored to noop, allowing you to compile
+\ 32k of characters and escape sequences to be written to the console
+\ at a time of your choosing.
 
 \ ------------------------------------------------------------------------
+\ wappers for the above that write the sequence after it is compiled
 
   headers>
 
@@ -276,9 +289,22 @@
  escape scs (scs)
 
 \ ------------------------------------------------------------------------
-\ wrappers for some of the above so forth can keep track of the cursor
+\ useful debug
 
-\ fixme: #out and #line settings must be bounds checked
+\ : .escape
+\   create ' ,
+\   does>
+\     $buffer 256 erase
+\     off> #$buffer
+\     @ execute
+\     $buffer #$buffer dump
+\     off> #$buffer ;
+
+\ .escape .setaf (setaf)       \ to see exactly what escape sequences
+\ .escape .setab (setab)       \ each of these compile
+
+\ ------------------------------------------------------------------------
+\ wrappers for some of the above so forth can keep track of the cursor
 
 : clear ( --- )     #out off #line off clear ;
 : hpa   ( x --- )   dup #out ! hpa ;

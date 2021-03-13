@@ -113,7 +113,7 @@ chk_tty:
 
 init:
   mov edi, origin           ; point to entry point
-  and edi, $0fffff000       ; mask to start of section address
+  and edi, $0ffff8000        ; mask to start of section address
 
   ; edi now points to the 0th byte of program memory belonging to this
   ; process.  this is the address of the programs elf headers.

@@ -152,15 +152,21 @@
 
   .( loading debugger: )
 
-  fload src/ext/debug/utils.f
-  fload src/ext/debug/init.f    \ - debug window initializations
-  fload src/ext/debug/stackdisp.f
-  fload src/ext/debug/window.f  \ - user interface display
-  fload src/ext/debug/see.f     \ - wrapper for decompiler extension
-  fload src/ext/debug/keys.f    \ - moving around without execution
-  fload src/ext/debug/debug.f   \ - main debug module
+\  fload src/ext/debug/utils.f
+\  fload src/ext/debug/init.f    \ - debug window initializations
+\  fload src/ext/debug/stackdisp.f
+\  fload src/ext/debug/window.f  \ - user interface display
+\  fload src/ext/debug/see.f     \ - wrapper for decompiler extension
+\  fload src/ext/debug/keys.f    \ - moving around without execution
+\  fload src/ext/debug/debug.f   \ - main debug module
 
+\  cr
+  
   forth definitions behead      \ only comment out if not including see
+
+\ ------------------------------------------------------------------------
+
+  fload src/ext/dents.f              \ + directory reading
 
 \ ------------------------------------------------------------------------
 \ custom initialization
