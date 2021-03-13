@@ -12,9 +12,9 @@
 
 \ ------------------------------------------------------------------------
 
-: 32swap- 32 swap - ;
-: <<-rot << -rot ;
-: u>>or u>> or ;
+: 32swap-   32 swap - ;
+: <<-rot    << -rot ;
+: u>>or     u>> or ;
 
 : +>> 2dup 32swap- <<-rot u>>or ;
 : <<+ 2dup <<-rot 32swap- u>>or ;
@@ -30,8 +30,17 @@
 
 \ ------------------------------------------------------------------------
 
-  headers>
+: seed2@  ( seed1 --- seed1 seed2 )
+  SEED2 over $80080000 and
+  if
+    dup 10 >> 3 and 
+    <<+ dup !> SEED2
+  then ;
 
+\ ------------------------------------------------------------------------
+
+  headers>
+  
 : rnd    ( n1 --- n2 )
   >r 0 1
   begin
@@ -52,7 +61,7 @@
 \ seed rng (consider using /dev/random for this)
 
 : rand
-  time@ tv cell+ @ xor
+  time@ tv cell+ @ xor 
   dup !> SEED1 !> SEED2 ;
 
 \ ------------------------------------------------------------------------

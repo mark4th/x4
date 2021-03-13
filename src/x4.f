@@ -148,7 +148,7 @@
   forth definitions
 
 \ ------------------------------------------------------------------------
-\ the debugger
+\ the debugger     this needs a complete rewrite (soon ish)
 
   .( loading debugger: )
 
@@ -160,9 +160,11 @@
 \  fload src/ext/debug/keys.f    \ - moving around without execution
 \  fload src/ext/debug/debug.f   \ - main debug module
 
-\  cr
-  
-  forth definitions behead      \ only comment out if not including see
+\  forth definitions behead      \ only comment out if not including see
+
+\ ------------------------------------------------------------------------
+
+  fload src/ext/dents.f              \ + directory reading
 
 \ ------------------------------------------------------------------------
 

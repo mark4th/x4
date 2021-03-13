@@ -13,7 +13,7 @@
 
   <headers
 
-: (format)  ( ... #params format --- )
+: (format)      ( ... n1 t-string )
   t-table + !> f$           \ set address of format string
   >params                   \ store parameters for format string
   >format ;                 \ compile escape sequence from format string
@@ -29,7 +29,7 @@
 
 \ n1 is the offset within the terminfo files string section
 
-: format      ( n1 n2 --- )
+: format      ( ... n1 n2 --- )
   create, ,
   does>       ( ... --- )
     dcount                  \ fetch parameter count for format string

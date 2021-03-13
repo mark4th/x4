@@ -38,6 +38,17 @@ enum: attrs
 ;enum
 
 \ ------------------------------------------------------------------------
+\ character attributes
+
+enum: attrs
+  1 /= :standout:
+  2 /= :underline:
+  4 /= :reverse:
+  8 /= :bold:
+ 16 /= :alt:             \ alt charset (ibm box charset)
+;enum
+
+\ ------------------------------------------------------------------------
 
   0 var attrib              \ current color atributes + bold/standout etc
 

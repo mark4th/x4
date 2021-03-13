@@ -91,7 +91,7 @@ struct: win
 
 : scr-size      ( scr --- size-in-chars )
   dup>r scr-width@
-  r> scr-height@ * ;
+  r>    scr-height@ * ;
 
 \ ------------------------------------------------------------------------
 \ get cell size of one line of a screen

@@ -185,7 +185,7 @@
 
 : (%)       ( ... c1 --- )
   f$@ nip                   \ get % command char from format string
-  ?digit                    \
+  ?digit                    \ used in %d to set number of digits
   case:                     \ execute command
     '%' opt %%  'p' opt %p
     'd' opt %d  'c' opt %c

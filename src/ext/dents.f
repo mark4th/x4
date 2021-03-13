@@ -57,6 +57,9 @@ struct: DIRENT_T
 
   headers>
 
+\ ------------------------------------------------------------------------
+\ getters and setters
+
 : d_ino@    ( --- d_ino )   [ ent-buff DIRENT_T.d_ino   ]# @ ;
 : d_off@    ( --- d_off )   [ ent-buff DIRENT_T.d_off   ]# @ ;
 : d_rclen@  ( --- d_rclen ) [ ent-buff DIRENT_T.d_rclen ]# w@ ;

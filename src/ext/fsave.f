@@ -262,10 +262,11 @@ create identity
 : shdr!        ( --- )
   sh-addr                   \ get address for section headers
   dup sec_header erase      \ first section header is always null
+      sec_header +          \ point to second secton header
 
   sec_header +              \ point to second secton header
 
-  1              e,         \ name     .text
+  1              e,         \ name   .text
   SHT_PROGBITS   e,         \ type
   SHF_AX         e,         \ flags
   origin         e,         \ addr
@@ -276,7 +277,7 @@ create identity
   16             e,         \ align
   0              e,         \ entsize
 
-  7              e,         \ name     .bss
+  7              e,         \ name   .bss
   SHT_NOBITS     e,         \ type
   SHF_WA         e,         \ flags
   ss-addr        e,         \ addr
@@ -287,7 +288,7 @@ create identity
   1              e,         \ align
   0              e,         \ entsize
 
-  12             e,         \ name     .shstrtab
+  12             e,         \ name   .shstrtab
   SHT_STRTAB     e,         \ type
   0              e,         \ flags
   0              e,         \ addr

@@ -91,10 +91,10 @@
 \ ------------------------------------------------------------------------
 \ display menu bar item name
 
-: .bname    ( attr name )
+: .bname    ( attr name --- )
   swap dup >pref
   8 >> >attrib
-  count    dup #out +!
+  count dup #out +!
   type cuf1 cuf1 ;
 
 \ ------------------------------------------------------------------------
