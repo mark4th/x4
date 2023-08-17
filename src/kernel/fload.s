@@ -105,9 +105,7 @@ endfload:
 ; ------------------------------------------------------------------------
 ; aborts an fload - leaves line# of error intact
 
-  _noname_
-
-abortfload:
+colon "abort-fload", abort_fload
   dd linenum, endfload      ; save line number we aborted on so endfload
   dd zstoreto, linenum_b    ; doesnt 'restore' it
   dd exit

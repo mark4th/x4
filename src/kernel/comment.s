@@ -37,7 +37,7 @@ colon '.(', dotlparen
 
 colon '\s', backs
   dd floads
-  dd qcolon, abortfload, noop
+  dd qcolon, abort_fload, noop
   dd exit
 
 ; ------------------------------------------------------------------------
@@ -50,7 +50,7 @@ colon "\\s", xs
 .L0:
   dd floads                 ; close all in progress floads
   dd qwhile, .L1
-  dd abortfload
+  dd abort_fload
   dd dorepeat, .L0
 .L1:
   dd exit

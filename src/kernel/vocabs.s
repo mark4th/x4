@@ -18,7 +18,6 @@
 
   _var_ 'context', context, context0_b
   _var_ '#context', numcontext, 3
-  _var_ 'contexts', contexts, 0
 
 ; ------------------------------------------------------------------------
 ; the context stack - the search order
@@ -116,18 +115,3 @@ code 'previous', previous
   _vocab_ "root", root, rootn, compiler_b
 
 ; ========================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

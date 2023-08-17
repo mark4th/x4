@@ -116,10 +116,10 @@ colon '(quit)', pquit
   dd rp0, rpstore           ; reset stack pointers
   dd sp0, spstore
   dd dobegin                ; stay a while... stay forever! <-- props to
-.L0:                        ; anyone who knows what game this is from :)
+.L1:                        ; anyone who knows what game this is from :)
   dd dotstatus, dotok       ; display status and ok message (maybe)
   dd interpret              ; interpret user input
-  dd doagain, .L0
+  dd doagain, .L1
   dd exit                   ; this should never get executed
 
 ; ------------------------------------------------------------------------

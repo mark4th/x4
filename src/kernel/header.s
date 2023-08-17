@@ -95,7 +95,7 @@ colon '>name', toname
 ; ------------------------------------------------------------------------
 ; create a new word header
 
-colon '(head,)', phead
+colon '(head,)', phead      ; ( a1 n1 --- )
   dd hhere, tor             ; remember link field address of new header
   dd plit, 0, hcomma        ; dummy link to as yet unknown thread
   dd hhere, dup             ; get address where nfa will be compiled

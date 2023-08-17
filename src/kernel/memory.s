@@ -74,7 +74,7 @@ code '[]!', cells_store
 
 code '[w]@', words_fetch
   pop eax
-  movzx bx, [eax +2* ebx]
+  mov bx, [eax +2* ebx]
   next
 
 ; ------------------------------------------------------------------------
@@ -84,7 +84,7 @@ code '[w]@', words_fetch
 code '[w]!', words_store
   pop eax
   pop ecx
-  mov word[eax +2* ebx], cx
+  mov [eax +2* ebx], cx
   pop ebx
   next
 
