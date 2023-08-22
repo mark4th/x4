@@ -7,7 +7,7 @@
 \ some useful words to have around while debugging new code
 \ ------------------------------------------------------------------------
 
- forth definitions
+  forth definitions
 
 \ ------------------------------------------------------------------------
 

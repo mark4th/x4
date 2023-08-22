@@ -129,6 +129,7 @@
   headers>                  \ turn headers on again
   h-voc previous            \ remove h-voc from context
   off> h-state              \ no longer headerless
+  h-current definitions
   off> h-current
   off> h-hp
   off> h-last
@@ -150,8 +151,8 @@
   root definitions
 
 : (definitions)
-  context #context 1- 
-  []+ 'h-current dmove ;
+  context #context 1- + @
+  'h-current ! ;
 
 \ ------------------------------------------------------------------------
 \ hides the oritinal definition of this word but also calls it

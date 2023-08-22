@@ -114,7 +114,7 @@ colon '?missing', qmissing
 ; ------------------------------------------------------------------------
 ; parse input stream and see if word is defined anywhere in search order
 
-;     ( --- f1 | false )
+;     ( --- cfa f1 | false )
 
 colon 'defined', defined
   dd bl_, word_             ; parse space delimited string from input

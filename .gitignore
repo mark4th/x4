@@ -2,5 +2,6 @@
 kernel.com
 src/kernel.o
 x4
+x4_old
 *.lst
 *~

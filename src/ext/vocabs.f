@@ -42,10 +42,4 @@
     current context #context
     r> !> context ;
 
-\ ------------------------------------------------------------------------
-\ revert back to previous context stack
-
-: restore>context    ( current context #context --- )
-  !> #context !> context !> current ;
-
 \ ========================================================================
