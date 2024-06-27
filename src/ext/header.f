@@ -129,7 +129,9 @@
   headers>                  \ turn headers on again
   h-voc previous            \ remove h-voc from context
   off> h-state              \ no longer headerless
-  h-current definitions
+
+  h-current !> current
+  definitions
   off> h-current
   off> h-hp
   off> h-last

@@ -3,7 +3,7 @@
 
 ; ------------------------------------------------------------------------
 
-  _defer_ 'emit', emit, pemit
+  _defer_ 'emit', emit, p_utf8
   _defer_ 'key', key, pkey
 
 ; ------------------------------------------------------------------------
@@ -15,6 +15,8 @@
   _variable_ '#line', numline, 0 ; how far down the screen we are
 
   _var_ 'fdout', fdout, 1        ; defaults file descriptor for emit
+
+  _var_ 'utf8c', utf8c, 0         ; utf8 character sequence
 
 ; ------------------------------------------------------------------------
 ; these constants are patched by an extension to reflect reality
@@ -29,11 +31,119 @@
 
 colon '(emit)', pemit
   dd spfetch                ; point to character to emit
-  dd fdout, swap            ; normally stdout
-  dd plit, 1                ; writing one character only to stdout
+  dd plit, 1, swap          ; writing one character only to stdout
+  dd fdout                  ; normally stdout
   dd sys_write, drop2       ; discard return value and character
   dd numout, incr
   dd exit
+
+; ------------------------------------------------------------------------
+
+u8_emit:
+  mov ebx, [fdout + BODY]   ; fd in ebx
+  mov ecx, utf8c + BODY     ; ecx points to sequence
+  mov eax, 4                ; eax = <write> and edx = count
+  int $80
+  inc dword [numout + BODY]
+  pop esi                   ; restore ip
+  pop ebx
+  next
+
+; ------------------------------------------------------------------------
+
+u8:
+  push ebx
+  shr ebx, cl
+  and ebx, esi
+  or ebx, edi
+  mov eax, utf8c + BODY
+  mov byte [eax + edx], bl
+  inc edx
+  pop ebx
+  ret
+
+; ------------------------------------------------------------------------
+
+utf_800:
+  mov ecx, 6
+  mov esi, 0x1f
+  mov edi, 0xc0
+  call u8
+
+  mov ecx, 0
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  jmp u8_emit;
+
+; ------------------------------------------------------------------------
+
+utf_10000:
+  mov ecx, 12
+  mov esi, 0x0f
+  mov edi, 0xe0
+  call u8
+
+  mov ecx, 6
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  mov ecx, 0
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  jmp u8_emit
+
+; ------------------------------------------------------------------------
+
+utf_110000:
+  mov ecx, 18
+  mov esi, 7
+  mov edi, 0xf0
+  call u8
+
+  mov ecx, 12
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  mov ecx, 6
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  mov ecx, 0
+  mov esi, 0x3f
+  mov edi, 0x80
+  call u8
+
+  jmp u8_emit
+
+; ------------------------------------------------------------------------
+
+code '(utf8)', p_utf8
+  cmp ebx, 0x7f
+  jl pemit
+
+  push esi
+
+  mov edx, 0
+  mov [utf8c + BODY], edx
+
+  cmp ebx, 0x800
+  jl utf_800
+
+  cmp ebx, 0x10000
+  jl utf_10000
+
+  cmp ebx, 0x110000
+  jl utf_110000
+
+  pop ebx
+  next
 
 ; ------------------------------------------------------------------------
 ; uses qkfd pollfd structure to poll standardin

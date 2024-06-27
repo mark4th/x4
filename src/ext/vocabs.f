@@ -12,7 +12,8 @@
 
 : (only)        ( a1 --- )
   >body                     \ point to body of specified vocabulary
-  context dup 64 erase      \ erase entire context stack
+  context dup 64            \ erase entire context stack
+  erase
   !                         \ put specified vocabulary in context
   1 !> #context ;           \ set new context stack depth
 
@@ -41,5 +42,10 @@
     dup>r context swap 64 cmove
     current context #context
     r> !> context ;
+
+: <context
+  !> #context
+  !> context
+  !> current ;
 
 \ ========================================================================

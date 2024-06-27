@@ -134,8 +134,20 @@ init:
   call nest                 ; the following is a colon definition
 
   dd _pdefault              ; hi priority defered init chain
+
+  ; there is a bug in here somewhere leaving dross on the stacks
+
+  dd rp0, rpstore           ; reset stack pointers
+  dd sp0, spstore
+
   dd _default               ; std priority defered init chain
+  dd rp0, rpstore           ; reset stack pointers
+  dd sp0, spstore
+
   dd _ldefault              ; low priority deferred init chain
+  dd rp0, rpstore           ; reset stack pointers
+  dd sp0, spstore
+
   dd quit                   ; run inner loop - never returns
 
 ; ========================================================================

@@ -39,11 +39,6 @@ code 'skip', skip
 ;       a2 = address where c1 was found (end of string if not found)
 ;       n2 = length from a2 to end of string
 
-; i think n2 is a totally useless value to return. it would be much more
-; usefull if this returned the length of the a2 string instead. it would
-; simplify parse no end. - mental note - make this return sane values ?
-; this would break code that expects n2 to be standard... (who cares?)
-
 code 'scan', scan
   pop ecx                   ; get length of string in ecx (n1)
   jecxz .L2                 ; null string ?

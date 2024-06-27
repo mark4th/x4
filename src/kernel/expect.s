@@ -63,7 +63,7 @@ colon 'norm-char', normchar
 ;       ( a1 n1 -- )
 
 colon '(expect)', pexpect
-  dd swap, plit, 0          ; ( len adr #sofar )
+  dd swap, plit, 0          ; ( max adr #sofar --- )
   dd dobegin
 .L1:
   dd pluck                  ; get diff between expected and #sofar

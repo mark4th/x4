@@ -7,7 +7,7 @@
 \ this file should be in your home directory
 
   create rc-file
-    ," /.x4.rcf"
+    ," ~/.x4.rcf"
 
 \ ------------------------------------------------------------------------
 \ we need to get the user name out of the environment...

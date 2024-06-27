@@ -5,7 +5,7 @@
 
 \ ------------------------------------------------------------------------
 
-  vocabulary see see definitions
+  vocabulary debug debug definitions
 
 \ ------------------------------------------------------------------------
 \ fetch next xt or skip past next xt

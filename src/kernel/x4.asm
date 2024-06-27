@@ -45,6 +45,10 @@ origin:
   _constant_ 'intty', intty, 0
   _constant_ 'outtty', outtty, 0
 
+  _var_ "sp1", sp1, 0
+  _var_ "sp2", sp2, 0
+  _var_ "sp3", sp3, 0
+
 ; ------------------------------------------------------------------------
 
   _var_ 'heap-prot', heap_prt, 7     ; +rwx
@@ -120,6 +124,8 @@ code '@map', fmap
   %include "scan.s"         ; skip and scan etc
   %include "expect.s"       ; query and expect
   %include "parse.s"        ; parse and parse-word etc
+  %include "find.s"         ; dictionary searches
+  %include "interpret.s"    ; inner interpreter (actually inner compiler)
 
 ; ------------------------------------------------------------------------
 ; chain words on compiler vocabulary
@@ -127,12 +133,10 @@ code '@map', fmap
   _compiler_
 
   %include "comment.s"      ; important and often neglected
-  %include "find.s"         ; dictionary searches
   %include "header.s"       ; word header creation
   %include "comma.s"        ; the compiler
   %include "compile.s"      ; creating words
   %include "fload.s"        ; interpret from file
-  %include "interpret.s"    ; inner interpreter (actually inner compiler)
 
 ; ------------------------------------------------------------------------
 ; chain words on root vocabulary
