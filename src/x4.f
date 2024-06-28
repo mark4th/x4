@@ -167,10 +167,6 @@
   fload src/ext/dents.f              \ + directory reading
 
 \ ------------------------------------------------------------------------
-
-  fload src/ext/dents.f              \ + directory reading
-
-\ ------------------------------------------------------------------------
 \ custom initialization
 
   fload src/ext/init.f          \ + interpret ~/.x4.rcf
