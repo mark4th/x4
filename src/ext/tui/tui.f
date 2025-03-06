@@ -236,8 +236,6 @@ struct: win
 : win<rev       ( win --- )   :reverse:   wprefclr ;
 : win>bold      ( win --- )   :bold:      wprefset ;
 : win<bold      ( win --- )   :bold:      wprefclr ;
-: win>alt       ( win --- )   :alt:       wprefset ;   \ alt charset
-: win<alt       ( win --- )   :alt:       wprefclr ;
 
 \ ------------------------------------------------------------------------
 
@@ -257,16 +255,6 @@ struct: win
 : ?boxed    ( win --- f )
   win.flags w@
   win-boxed and ;
-
-\ ------------------------------------------------------------------------
-\ if blanks are backfill char switch to alt charset
-
-: ?filled       ( win --- )
-  dup win-flags@            \ is window back filled?
-  win-filled and
-  ?:
-    win>alt                 \ yes set alt charset on
-    drop ;
 
 \ ------------------------------------------------------------------------
 \ expose size of structures to user apps but not the structures

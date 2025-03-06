@@ -18,7 +18,7 @@
 \ same as above but window borders get their own attributes
 
 : +battrs        ( c1 win --- 00xxyycc )
-  dup>r win-battr@ :alt: or 8 <<
+  dup>r win-battr@ 8 <<
   r> win-bcolor@ or 8 << or ;
 
 \ ------------------------------------------------------------------------
@@ -26,7 +26,6 @@
 
 : blank@        ( win --- char+atr )
   dup>r win-attr@           \ keep copy of current window attributes
-  r@ ?filled                \ switch to alt charset if using fill char
   r@ win-blank@             \ blank char for window (usually a bl)
   r@ +attrs
   swap r> win-attr! ;       \ restore original attributes

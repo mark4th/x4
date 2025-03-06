@@ -34,18 +34,6 @@ enum: attrs
   2 /= :underline:
   4 /= :reverse:
   8 /= :bold:
- 16 /= :alt:             \ alt charset (ibm box charset)
-;enum
-
-\ ------------------------------------------------------------------------
-\ character attributes
-
-enum: attrs
-  1 /= :standout:
-  2 /= :underline:
-  4 /= :reverse:
-  8 /= :bold:
- 16 /= :alt:             \ alt charset (ibm box charset)
 ;enum
 
 \ ------------------------------------------------------------------------

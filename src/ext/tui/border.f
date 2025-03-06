@@ -75,7 +75,6 @@
 
 : ((.borders))
   dup win-battr@ swap
-  dup win>alt
   dup>r win-xco@ 1-
   r@ win-yco@ 1-
   r@ win-scr@ b-at

@@ -70,9 +70,7 @@
 
 : >attribs      ( attr --- )
   dup $ff and >attrib       \ set fg/bg colors
-  8 >> dup >pref            \ set bold, underline etc
-
-  :alt: and ?: >alt <alt ;  \ set or clear alt charset
+  8 >> dup >pref ;          \ set bold, underline etc
 
 \ ------------------------------------------------------------------------
 \ copy contents of buff1 at index to buff2 at index and emit it

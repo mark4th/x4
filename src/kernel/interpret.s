@@ -7,7 +7,7 @@
 ; ------------------------------------------------------------------------
 
   _defer_ 'quit', quit, pquit
-  _defer_ '%interpret', zinterpret, pinterpret
+  _defer_ 'interpret', interpret, pinterpret
   _defer_ '.status', dotstatus, noop
   _defer_ '.line#', dotl, noop
 
@@ -64,24 +64,14 @@ colon '?exec', qexec
 ; ------+-------+---------+
 
 ; ------------------------------------------------------------------------
-; interpret/compile word or number (%interpret vectors to here normally)
-
-;       ( xt [t | 1] | false --- | n1 )
-
-colon '(interpret)', pinterpret
-  dd qdup                   ; ?exec needs the -1/1 but ?# does not need 0
-  dd qcolon
-  dd qexec, qnum
-  dd exit
-
-; ------------------------------------------------------------------------
 ; interpret input buffers till nothing left to interpreet
 
-colon 'interpret', interpret
+colon '(interpret)', pinterpret
   dd dobegin                ; repeat till tib is empty
 .L0:
   dd defined                ; is the typed in stuff a valid forth word?
-  dd zinterpret             ; interpret, compile or abort
+  dd qdup, qcolon
+  dd qexec, qnum
   dd qstack                 ; did any of the above over/underflow?
   dd left, zequals
   dd quntil, .L0
